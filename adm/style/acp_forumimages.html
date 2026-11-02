@@ -1,0 +1,66 @@
+{% INCLUDE 'overall_header.html' %}
+
+<h1>{{ lang('ACP_FORUMIMAGES_TITLE') }}</h1>
+<p>{{ lang('ACP_FORUMIMAGES_EXPLAIN') }}</p>
+
+<form id="acp_forumimages" method="post" action="{{ U_ACTION }}">
+    <fieldset>
+        <legend>{{ lang('ACP_FORUMIMAGES_DISPLAY_SETTINGS') }}</legend>
+
+        <dl>
+            <dt><label for="forumimages_forum_id">{{ lang('ACP_FORUMIMAGES_FORUM') }}</label><br><span>{{ lang('ACP_FORUMIMAGES_FORUM_EXPLAIN') }}</span></dt>
+            <dd><select id="forumimages_forum_id" name="forumimages_forum_id">{{ S_FORUM_OPTIONS }}</select></dd>
+        </dl>
+
+        <dl>
+            <dt><label for="forumimages_source">{{ lang('ACP_FORUMIMAGES_SOURCE') }}</label><br><span>{{ lang('ACP_FORUMIMAGES_SOURCE_EXPLAIN') }}</span></dt>
+            <dd>
+                <select id="forumimages_source" name="forumimages_source">
+                    <option value="0"{% if FORUMIMAGES_SOURCE == 0 %} selected{% endif %}>{{ lang('ACP_FORUMIMAGES_SOURCE_IMG') }}</option>
+                    <option value="1"{% if FORUMIMAGES_SOURCE == 1 %} selected{% endif %}>{{ lang('ACP_FORUMIMAGES_SOURCE_ATTACHMENTS') }}</option>
+                    <option value="2"{% if FORUMIMAGES_SOURCE == 2 %} selected{% endif %}>{{ lang('ACP_FORUMIMAGES_SOURCE_BOTH') }}</option>
+                </select>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt><label>{{ lang('ACP_FORUMIMAGES_CAROUSEL') }}</label><br><span>{{ lang('ACP_FORUMIMAGES_CAROUSEL_EXPLAIN') }}</span></dt>
+            <dd>
+                <label><input type="radio" class="radio" name="forumimages_carousel" value="1"{% if FORUMIMAGES_CAROUSEL %} checked{% endif %}> {{ lang('YES') }}</label>
+                <label><input type="radio" class="radio" name="forumimages_carousel" value="0"{% if not FORUMIMAGES_CAROUSEL %} checked{% endif %}> {{ lang('NO') }}</label>
+            </dd>
+        </dl>
+    </fieldset>
+
+    <fieldset>
+        <legend>{{ lang('ACP_FORUMIMAGES_IMAGE_SETTINGS') }}</legend>
+
+        <dl>
+            <dt><label for="forumimages_count">{{ lang('ACP_FORUMIMAGES_COUNT') }}</label><br><span>{{ lang('ACP_FORUMIMAGES_COUNT_EXPLAIN') }}</span></dt>
+            <dd><input type="number" id="forumimages_count" name="forumimages_count" min="1" max="40" value="{{ FORUMIMAGES_COUNT }}"></dd>
+        </dl>
+
+        <dl>
+            <dt><label for="forumimages_min_count">{{ lang('ACP_FORUMIMAGES_MIN_COUNT') }}</label><br><span>{{ lang('ACP_FORUMIMAGES_MIN_COUNT_EXPLAIN') }}</span></dt>
+            <dd><input type="number" id="forumimages_min_count" name="forumimages_min_count" min="1" max="40" value="{{ FORUMIMAGES_MIN_COUNT }}"></dd>
+        </dl>
+
+        <dl>
+            <dt><label for="forumimages_size">{{ lang('ACP_FORUMIMAGES_SIZE') }}</label><br><span>{{ lang('ACP_FORUMIMAGES_SIZE_EXPLAIN') }}</span></dt>
+            <dd><input type="number" id="forumimages_size" name="forumimages_size" min="30" max="200" value="{{ FORUMIMAGES_SIZE }}"> {{ lang('PIXEL') }}</dd>
+        </dl>
+
+        <dl>
+            <dt><label for="forumimages_exclude_topics">{{ lang('ACP_FORUMIMAGES_EXCLUDE_TOPICS') }}</label><br><span>{{ lang('ACP_FORUMIMAGES_EXCLUDE_TOPICS_EXPLAIN') }}</span></dt>
+            <dd><input type="text" class="text medium" id="forumimages_exclude_topics" name="forumimages_exclude_topics" value="{{ FORUMIMAGES_EXCLUDE_TOPICS }}"></dd>
+        </dl>
+
+        <p class="submit-buttons">
+            <input class="button1" type="submit" name="submit" value="{{ lang('SUBMIT') }}">
+            <input class="button2" type="reset" value="{{ lang('RESET') }}">
+        </p>
+        {{ S_FORM_TOKEN }}
+    </fieldset>
+</form>
+
+{% INCLUDE 'overall_footer.html' %}
