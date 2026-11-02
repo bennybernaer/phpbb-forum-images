@@ -1,11 +1,5 @@
 <div role="region" class="forumimages-panel{% if not FORUMIMAGES_CAROUSEL %} forumimages-panel-static{% endif %}" style="--forumimages-size: {{ FORUMIMAGES_SIZE }}px;" aria-label="{{ lang('FORUMIMAGES_RECENT_IMAGES') }}"{% if FORUMIMAGES_CAROUSEL %} data-forumimages-carousel{% endif %}>
     <div class="forumimages-inner">
-        {% if FORUMIMAGES_CAROUSEL %}
-            <button class="forumimages-nav forumimages-nav-prev" type="button" data-forumimages-prev aria-label="{{ lang('FORUMIMAGES_PREVIOUS') }}">
-                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-            </button>
-        {% endif %}
-
         <div class="forumimages-strip" data-forumimages-strip>
             <div class="forumimages-track" data-forumimages-track>
                 {% for image in forumimages %}
@@ -17,9 +11,14 @@
         </div>
 
         {% if FORUMIMAGES_CAROUSEL %}
-            <button class="forumimages-nav forumimages-nav-next" type="button" data-forumimages-next aria-label="{{ lang('FORUMIMAGES_NEXT') }}">
-                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-            </button>
+            <div class="forumimages-controls">
+                <button class="forumimages-nav" type="button" data-forumimages-prev aria-label="{{ lang('FORUMIMAGES_PREVIOUS') }}">
+                    {{ Icon('font', 'chevron-left', '', true) }}
+                </button>
+                <button class="forumimages-nav" type="button" data-forumimages-next aria-label="{{ lang('FORUMIMAGES_NEXT') }}">
+                    {{ Icon('font', 'chevron-right', '', true) }}
+                </button>
+            </div>
         {% endif %}
     </div>
 </div>
