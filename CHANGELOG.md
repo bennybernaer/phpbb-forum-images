@@ -5,13 +5,18 @@ All notable changes to **Forum Images** are documented here.
 ## 1.0.1 — 2026-11-02
 
 ### Added
-- Font Awesome previous/next navigation buttons for the carousel.
-- Manual navigation moves one image at a time while automatic scrolling continues.
-- Matching navigation styling for prosilver/default and Evolution.
-- English and Dutch accessibility labels for the navigation buttons.
+- Font Awesome previous/next controls for the continuous carousel using phpBB 4's `Icon()` helper.
+- Matching compact navigation styling for prosilver/default and Evolution.
+- Accessible English and Dutch labels for the carousel controls.
+- Local thumbnail/cache copies for attachment images to avoid intermittent attachment-route 403 responses.
+
+### Changed
+- Manual carousel navigation moves one image at a time with a smooth JavaScript animation while automatic scrolling continues.
+- Carousel controls are displayed below the image strip.
 
 ### Notes
 - No database or ACP setting changes are required for this update.
+- Attachment originals are never modified; cached images are stored in the extension's `thumbs/` directory.
 - The carousel remains continuous and automatic, with no CSS transitions added.
 
 ## 1.0.0 — 2026-11-02
@@ -28,7 +33,7 @@ All notable changes to **Forum Images** are documented here.
 - Respects phpBB forum read/list permissions before collecting or displaying images.
 - Only uses approved posts and approved topics.
 - Excludes private-message and orphaned attachments.
-- Uses phpBB 4's `phpbb_storage_attachment` route for attachment URLs.
+- Uses phpBB 4's `phpbb_storage_attachment` route as a fallback for attachment URLs.
 - Supports phpBB 4 / s9e TextFormatter image markup with a legacy `[img]` fallback.
 - Requires PHP 8.2+ and targets phpBB 4.0.x.
 
