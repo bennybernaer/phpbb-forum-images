@@ -2,7 +2,7 @@
     "name": "bennybernaer/forumimages",
     "type": "phpbb-extension",
     "description": "Displays recent images from a configurable forum above that forum's title.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "GPL-2.0-only",
     "authors": [
         {
