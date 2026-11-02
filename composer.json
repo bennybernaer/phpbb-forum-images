@@ -1,0 +1,23 @@
+{
+    "name": "bennybernaer/forumimages",
+    "type": "phpbb-extension",
+    "description": "Displays recent images from a configurable forum above that forum's title.",
+    "version": "1.0.0",
+    "license": "GPL-2.0-only",
+    "authors": [
+        {
+            "name": "bennybernaer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "composer/installers": "^2.3"
+    },
+    "extra": {
+        "display-name": "Forum Images",
+        "soft-require": {
+            "phpbb/phpbb": ">=4.0.0,<4.1.0@dev"
+        }
+    },
+    "time": "2026-11-02"
+}
