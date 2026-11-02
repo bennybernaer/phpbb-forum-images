@@ -1,13 +1,5 @@
 <?php
-/**
- * Forum Images language file (English).
- */
-
-if (!defined('IN_PHPBB'))
-{
-    exit;
-}
-
+if (!defined('IN_PHPBB')) { exit; }
 $lang = array_merge($lang, [
     'FORUMIMAGES_RECENT_IMAGES' => 'Recent forum images',
     'FORUMIMAGES_PREVIOUS' => 'Previous images',
