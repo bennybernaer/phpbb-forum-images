@@ -1,0 +1,68 @@
+name: Release 1.0.0
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/release-1.0.0.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate PHP files
+        run: find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Build installable ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf build
+          mkdir -p build/bennybernaer/forumimages downloads
+          cp -R acp adm config event language migrations styles build/bennybernaer/forumimages/
+          cp ext.php composer.json README.md CHANGELOG.md license.txt build/bennybernaer/forumimages/
+          (
+            cd build
+            zip -qr -9 ../downloads/forumimages-1.0.0.zip bennybernaer
+          )
+          unzip -t downloads/forumimages-1.0.0.zip
+          rm -rf build
+          rm -f downloads/forumimages-1.0.0.zip.b64 downloads/.gitkeep
+
+      - name: Commit download archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add downloads
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add Forum Images 1.0.0 download archive'
+            git push origin HEAD:main
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          RELEASE_SHA=$(git rev-parse HEAD)
+          if gh release view 1.0.0 >/dev/null 2>&1; then
+            gh release upload 1.0.0 downloads/forumimages-1.0.0.zip --clobber
+          else
+            gh release create 1.0.0 downloads/forumimages-1.0.0.zip \
+              --target "$RELEASE_SHA" \
+              --title 'Forum Images 1.0.0' \
+              --notes 'Initial public release of Forum Images for phpBB 4.0. Includes configurable forum selection, image sources, continuous carousel, prosilver and Evolution styling, English and Dutch language files, and phpBB permission/content-visibility checks.'
+          fi
