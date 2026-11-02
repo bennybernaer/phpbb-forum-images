@@ -1,30 +1,43 @@
 # Forum Images
 
-Forum Images is a phpBB 4.0 extension that displays recent images from a selected forum in a configurable carousel above the forum title.
+phpBB 4.0 extension by **bennybernaer**.
+
+Displays recent images from one selected forum above the forum title. Supports phpBB 4 TextFormatter `[img]` images and image attachments, an optional continuous carousel, configurable image count, minimum count, thumbnail size, and excluded topic IDs.
 
 ## Features
 
-- Select the forum from the ACP
-- Display images from attachments, `[img]` BBCode, or both
-- Configurable image count, minimum count and thumbnail size
-- Optional automatic carousel
+- Select one target forum from the ACP
+- Use `[img]` images, image attachments, or both
+- Continuous carousel or static row
+- Configurable maximum/minimum image count
+- Configurable thumbnail size
 - Exclude specific topic IDs
-- Respects phpBB forum permissions and content visibility
-- Separate styling for prosilver and Evolution
+- Respects existing phpBB forum permissions and content visibility
+- Separate prosilver/default and Evolution styling
 - English and Dutch language files
 
 ## Requirements
 
-- phpBB 4.0
+- phpBB 4.0.x
 - PHP 8.2 or newer
 
 ## Installation
 
-1. Download the latest ZIP from the `downloads` folder or from GitHub Releases.
+1. Download `downloads/forumimages-1.0.0.zip` or the latest GitHub Release.
 2. Extract it so the extension is located at `ext/bennybernaer/forumimages/`.
 3. Go to **ACP > Customise > Manage extensions**.
 4. Enable **Forum Images**.
-5. Configure the extension in the ACP and select the forum where the carousel should be shown.
+5. Open the extension settings and select the target forum.
+
+## Default settings
+
+No forum selected, both image sources, carousel enabled, 9 images, minimum 1 image, 120 px thumbnails.
+
+## Permissions
+
+The extension adds no custom permissions. It respects the existing phpBB forum permissions and only displays images when the current user can list and read the selected forum. Only approved posts/topics are used, and private-message attachments are excluded.
+
+See `CHANGELOG.md` for release details.
 
 ## License
 
