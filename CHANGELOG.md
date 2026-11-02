@@ -2,6 +2,18 @@
 
 All notable changes to **Forum Images** are documented here.
 
+## 1.0.1 — 2026-11-02
+
+### Added
+- Font Awesome previous/next navigation buttons for the carousel.
+- Manual navigation moves one image at a time while automatic scrolling continues.
+- Matching navigation styling for prosilver/default and Evolution.
+- English and Dutch accessibility labels for the navigation buttons.
+
+### Notes
+- No database or ACP setting changes are required for this update.
+- The carousel remains continuous and automatic, with no CSS transitions added.
+
 ## 1.0.0 — 2026-11-02
 
 ### Added
