@@ -1,0 +1,14 @@
+services:
+    bennybernaer.forumimages.listener:
+        class: bennybernaer\forumimages\event\listener
+        arguments:
+            - '@config'
+            - '@dbal.conn'
+            - '@template'
+            - '@auth'
+            - '@controller.helper'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }
