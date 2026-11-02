@@ -10,4 +10,6 @@ if (!defined('IN_PHPBB'))
 
 $lang = array_merge($lang, [
     'FORUMIMAGES_RECENT_IMAGES' => 'Recent forum images',
+    'FORUMIMAGES_PREVIOUS' => 'Previous images',
+    'FORUMIMAGES_NEXT' => 'Next images',
 ]);
