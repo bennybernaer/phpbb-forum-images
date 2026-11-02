@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-forumimages-carousel]').forEach((carousel) => {
         const viewport = carousel.querySelector('[data-forumimages-strip]');
         const track = carousel.querySelector('[data-forumimages-track]');
+        const previousButton = carousel.querySelector('[data-forumimages-prev]');
+        const nextButton = carousel.querySelector('[data-forumimages-next]');
 
         if (!viewport || !track) {
             return;
@@ -29,6 +31,31 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        const getStep = () => {
+            const first = originals[0];
+            const style = getComputedStyle(track);
+            const gap = parseFloat(style.columnGap || style.gap) || 0;
+            return first.getBoundingClientRect().width + gap;
+        };
+
+        const normaliseOffset = () => {
+            if (sequenceWidth <= 0) {
+                return;
+            }
+
+            while (offset > 0) {
+                offset -= sequenceWidth;
+            }
+
+            while (-offset >= sequenceWidth) {
+                offset += sequenceWidth;
+            }
+        };
+
+        const applyOffset = () => {
+            track.style.transform = `translate3d(${offset}px, 0, 0)`;
+        };
+
         const rebuildClones = () => {
             Array.from(track.children).slice(originals.length).forEach((item) => item.remove());
 
@@ -47,7 +74,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             offset = -((-offset) % sequenceWidth);
+            normaliseOffset();
+            applyOffset();
         };
+
+        const moveBy = (distance) => {
+            if (sequenceWidth <= 0) {
+                return;
+            }
+
+            offset += distance;
+            normaliseOffset();
+            applyOffset();
+        };
+
+        previousButton?.addEventListener('click', () => moveBy(getStep()));
+        nextButton?.addEventListener('click', () => moveBy(-getStep()));
 
         const animate = (time) => {
             if (lastTime === null) {
@@ -59,12 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (sequenceWidth > 0) {
                 offset -= speed * delta;
-
-                if (-offset >= sequenceWidth) {
-                    offset += sequenceWidth;
-                }
-
-                track.style.transform = `translate3d(${offset}px, 0, 0)`;
+                normaliseOffset();
+                applyOffset();
             }
 
             window.requestAnimationFrame(animate);
