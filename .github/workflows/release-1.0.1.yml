@@ -1,0 +1,67 @@
+name: Release 1.0.1
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/release-1.0.1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate PHP files
+        run: find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Build installable ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf build
+          mkdir -p build/bennybernaer/forumimages downloads
+          cp -R acp adm config event language migrations styles build/bennybernaer/forumimages/
+          cp ext.php composer.json README.md CHANGELOG.md license.txt build/bennybernaer/forumimages/
+          (
+            cd build
+            zip -qr -9 ../downloads/forumimages-1.0.1.zip bennybernaer
+          )
+          unzip -t downloads/forumimages-1.0.1.zip
+          rm -rf build
+
+      - name: Commit download archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add downloads/forumimages-1.0.1.zip
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add Forum Images 1.0.1 download archive'
+            git push origin HEAD:main
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          RELEASE_SHA=$(git rev-parse HEAD)
+          if gh release view 1.0.1 >/dev/null 2>&1; then
+            gh release upload 1.0.1 downloads/forumimages-1.0.1.zip --clobber
+          else
+            gh release create 1.0.1 downloads/forumimages-1.0.1.zip \
+              --target "$RELEASE_SHA" \
+              --title 'Forum Images 1.0.1' \
+              --notes 'Adds Font Awesome previous/next carousel controls with matching prosilver and Evolution styling. Manual navigation moves one image at a time while automatic scrolling continues.'
+          fi
