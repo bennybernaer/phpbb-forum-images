@@ -17,7 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let offset = 0;
         let lastTime = null;
         let sequenceWidth = 0;
+        let manualAnimation = false;
         const speed = 32;
+        const manualDuration = 280;
 
         const appendCloneSet = () => {
             originals.forEach((item) => {
@@ -32,10 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const getStep = () => {
-            const first = originals[0];
             const style = getComputedStyle(track);
             const gap = parseFloat(style.columnGap || style.gap) || 0;
-            return first.getBoundingClientRect().width + gap;
+            return originals[0].getBoundingClientRect().width + gap;
         };
 
         const normaliseOffset = () => {
@@ -78,14 +79,47 @@ document.addEventListener('DOMContentLoaded', () => {
             applyOffset();
         };
 
+        const easeInOutCubic = (progress) => (
+            progress < 0.5
+                ? 4 * progress * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 3) / 2
+        );
+
         const moveBy = (distance) => {
-            if (sequenceWidth <= 0) {
+            if (sequenceWidth <= 0 || manualAnimation) {
                 return;
             }
 
-            offset += distance;
-            normaliseOffset();
-            applyOffset();
+            const step = Math.abs(distance);
+            if (distance > 0 && offset + step > 0) {
+                offset -= sequenceWidth;
+                applyOffset();
+            }
+
+            const startOffset = offset;
+            const targetOffset = offset + distance;
+            const startTime = performance.now();
+            manualAnimation = true;
+
+            const animateManual = (time) => {
+                const progress = Math.min((time - startTime) / manualDuration, 1);
+                const eased = easeInOutCubic(progress);
+                offset = startOffset + (targetOffset - startOffset) * eased;
+                applyOffset();
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(animateManual);
+                    return;
+                }
+
+                offset = targetOffset;
+                normaliseOffset();
+                applyOffset();
+                manualAnimation = false;
+                lastTime = null;
+            };
+
+            window.requestAnimationFrame(animateManual);
         };
 
         previousButton?.addEventListener('click', () => moveBy(getStep()));
@@ -99,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const delta = Math.min((time - lastTime) / 1000, 0.1);
             lastTime = time;
 
-            if (sequenceWidth > 0) {
+            if (sequenceWidth > 0 && !manualAnimation) {
                 offset -= speed * delta;
                 normaliseOffset();
                 applyOffset();
