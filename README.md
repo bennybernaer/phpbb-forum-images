@@ -9,7 +9,7 @@ Displays recent images from one selected forum above the forum title. Supports p
 - Select one target forum from the ACP
 - Use `[img]` images, image attachments, or both
 - Continuous carousel or static row
-- Compact Font Awesome previous/next controls using phpBB 4's `Icon()` helper
+- Font Awesome previous/next controls using phpBB 4's `Icon()` helper (25 × 25 px in Evolution)
 - Smooth manual navigation one image at a time while automatic scrolling continues
 - Local cached thumbnails for attachment images
 - Configurable maximum/minimum image count
@@ -26,7 +26,7 @@ Displays recent images from one selected forum above the forum title. Supports p
 
 ## Installation
 
-1. Download `downloads/forumimages-1.0.1.zip` or the latest GitHub Release.
+1. Download `downloads/forumimages-1.0.2.zip` or the latest GitHub Release.
 2. Extract it so the extension is located at `ext/bennybernaer/forumimages/`.
 3. Go to **ACP > Customise > Manage extensions**.
 4. Enable **Forum Images**.
