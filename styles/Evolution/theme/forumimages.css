@@ -31,9 +31,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 18px;
-    min-width: 18px;
-    height: 18px;
+    width: 25px;
+    min-width: 25px;
+    height: 25px;
     padding: 0;
     border: 1px solid var(--color29);
     border-radius: 2px;
@@ -41,7 +41,7 @@
     background-image: none;
     box-shadow: none;
     color: var(--color12);
-    font-size: var(--ps-font-tiny);
+    font-size: var(--ps-font-normal);
     line-height: 1;
     text-align: center;
     text-shadow: none;
@@ -54,7 +54,7 @@
     border-color: var(--color29);
     background-color: var(--color21);
     background-image: none;
-    color: var(--color11);
+    color: var(--color01);
     text-shadow: none;
     outline: none;
 }
@@ -64,7 +64,7 @@
     width: auto;
     height: auto;
     margin: 0;
-    font-size: var(--ps-font-tiny);
+    font-size: var(--ps-font-normal);
     line-height: 1;
 }
 
