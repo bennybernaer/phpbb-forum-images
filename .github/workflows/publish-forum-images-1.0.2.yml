@@ -1,0 +1,83 @@
+name: Publish Forum Images 1.0.2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-forum-images-1.0.2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate sources and build full extension ZIP
+        run: |
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import zipfile
+          root = pathlib.Path.cwd()
+          metadata = json.loads((root / "composer.json").read_text(encoding="utf-8"))
+          assert metadata["version"] == "1.0.2", "Wrong composer version"
+          css = (root / "styles/Evolution/theme/forumimages.css").read_text(encoding="utf-8")
+          assert "width: 25px;" in css and "font-size: var(--ps-font-normal);" in css
+          assert "color: var(--color01);" in css
+          assert "## 1.0.2" in (root / "CHANGELOG.md").read_text(encoding="utf-8")
+          out = root / "downloads/forumimages-1.0.2.zip"
+          out.parent.mkdir(parents=True, exist_ok=True)
+          files = sorted(p for p in root.rglob("*") if p.is_file()
+                         and not any(part in {".git", ".github", "downloads", "__pycache__"} for part in p.relative_to(root).parts))
+          assert len(files) > 10, "Unexpectedly few extension files"
+          with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+              for p in files:
+                  z.write(p, "bennybernaer/forumimages/" + p.relative_to(root).as_posix())
+          with zipfile.ZipFile(out) as z:
+              assert z.testzip() is None
+              assert any(x.endswith("/event/listener.php") for x in z.namelist())
+              assert any(x.endswith("/composer.json") for x in z.namelist())
+          print(f"Created {out.name} containing {len(files)} files")
+          PY
+
+      - name: Add full package to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add downloads/forumimages-1.0.2.zip
+          if ! git diff --cached --quiet; then
+            git commit -m "Add complete Forum Images 1.0.2 release ZIP"
+            git push origin HEAD:main
+          fi
+
+      - name: Create GitHub release with ZIP asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > /tmp/release-notes.md <<'EOF'
+          ## Changed
+          - Evolution navigation controls increased from 18 × 18 px to 25 × 25 px.
+          - Evolution navigation icons now use `var(--ps-font-normal)`.
+          - Evolution hover and focus icon colour now uses `var(--color01)`.
+          - Existing backgrounds, borders, and other carousel styling remain unchanged.
+          - Prosilver/default styling is unaffected.
+
+          ## Installation
+          Download **forumimages-1.0.2.zip** and extract to `ext/bennybernaer/forumimages/`.
+          Clear the phpBB cache after updating. No database or ACP changes are required.
+          EOF
+          if gh release view 1.0.2 >/dev/null 2>&1; then
+            gh release upload 1.0.2 downloads/forumimages-1.0.2.zip --clobber
+          else
+            gh release create 1.0.2 downloads/forumimages-1.0.2.zip \
+              --title "Forum Images 1.0.2" \
+              --notes-file /tmp/release-notes.md \
+              --target main \
+              --latest
+          fi
