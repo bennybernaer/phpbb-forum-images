@@ -2,6 +2,17 @@
 
 All notable changes to **Forum Images** are documented here.
 
+## 1.0.2 — 2026-11-08
+
+### Changed
+- Evolution carousel navigation buttons enlarged from 18 × 18 px to 25 × 25 px.
+- Evolution navigation icons use `var(--ps-font-normal)` instead of `var(--ps-font-tiny)`.
+- Evolution navigation hover and focus icon colour changed to `var(--color01)`.
+- Existing Evolution backgrounds, borders and other carousel styling are unchanged; prosilver/default styling is unaffected.
+
+### Notes
+- CSS-only visual refinement; no database or ACP changes are needed.
+
 ## 1.0.1 — 2026-11-02
 
 ### Added
